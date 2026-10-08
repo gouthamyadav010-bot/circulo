@@ -26,6 +26,8 @@ export function AuthForm({ mode, initialType, nextPath, message }: AuthFormProps
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmationPending, setConfirmationPending] = useState(false);
+  const [resendingConfirmation, setResendingConfirmation] = useState(false);
 
   async function destinationForCurrentUser(userId: string) {
     const supabase = createClient();
@@ -95,6 +97,11 @@ export function AuthForm({ mode, initialType, nextPath, message }: AuthFormProps
           password,
         });
 
+        if (loginError?.code === "email_not_confirmed") {
+          setConfirmationPending(true);
+          setError("This email address still needs confirmation. Check your inbox, or resend the confirmation email below.");
+          return;
+        }
         if (loginError) throw loginError;
         if (data.user) {
           const destination = await destinationForCurrentUser(data.user.id);
@@ -111,6 +118,33 @@ export function AuthForm({ mode, initialType, nextPath, message }: AuthFormProps
       setError(cause instanceof Error ? cause.message : "Something went wrong. Please try again.");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function resendConfirmation() {
+    setError("");
+    setNotice("");
+    if (!email.trim()) {
+      setError("Enter your email address above first.");
+      return;
+    }
+
+    setResendingConfirmation(true);
+    try {
+      const supabase = createClient();
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: email.trim(),
+        options: {
+          emailRedirectTo: new URL("/auth/callback", window.location.origin).toString(),
+        },
+      });
+      if (resendError) throw resendError;
+      setNotice("Confirmation email sent. Check your inbox and spam folder, then use the confirmation link before signing in.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not resend the confirmation email. Please try again.");
+    } finally {
+      setResendingConfirmation(false);
     }
   }
 
@@ -222,6 +256,16 @@ export function AuthForm({ mode, initialType, nextPath, message }: AuthFormProps
           </label>
 
           {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">{error}</p>}
+          {confirmationPending && (
+            <button
+              type="button"
+              onClick={resendConfirmation}
+              disabled={resendingConfirmation}
+              className="relative inline-flex h-11 w-full items-center justify-center rounded-xl border border-brand-200 px-4 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50 disabled:opacity-60"
+            >
+              <span className="text-center">{resendingConfirmation ? "Sending…" : "Resend confirmation email"}</span>
+            </button>
+          )}
           {notice && <p role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium text-emerald-800">{notice}</p>}
           {message === "organization-missing" && !error && (
             <p role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium text-amber-800">
