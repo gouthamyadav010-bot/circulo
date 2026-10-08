@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, FolderKanban, Recycle, GitCompare, Map, Store, ArrowLeftRight, User, Menu, X, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { OrganizationAccount } from "@/components/circulo/OrganizationAccount";
 
 const navItems = [
   { name: "Dashboard", href: "/company/dashboard", icon: LayoutDashboard },
@@ -68,12 +69,10 @@ export default function CompanyLayout({ children }: { children: React.ReactNode 
               <div className="text-lg font-bold text-emerald-700">87/100</div>
             </div>
           </div>
-          <Link href="/company/profile">
-            <div className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-              <User className="mr-3 flex-shrink-0 h-5 w-5 text-slate-400" />
-              Green Heights
-            </div>
-          </Link>
+          <div className="flex items-start gap-3 px-3 py-2 text-sm">
+            <User className="mt-0.5 h-5 w-5 flex-shrink-0 text-slate-400" />
+            <OrganizationAccount fallbackName="Green Heights" />
+          </div>
         </div>
       </aside>
 

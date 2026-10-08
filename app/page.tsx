@@ -50,7 +50,7 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mb-24"
         >
-          <Link href="/company/dashboard" className="group">
+          <Link href="/auth/signup?type=company" className="group">
             <div className="glass-panel rounded-2xl p-8 text-left h-full transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-transparent hover:border-brand-200">
               <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center mb-6 text-brand-600">
                 <Building2 className="w-7 h-7" />
@@ -62,12 +62,12 @@ export default function Home() {
                 Estimate waste using AI, list materials, find verified recyclers, and track the end-to-end journey.
               </p>
               <div className="flex items-center text-brand-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
-                Continue as Company <ArrowRight className="ml-2 w-5 h-5" />
+                Create Company Account <ArrowRight className="ml-2 w-5 h-5" />
               </div>
             </div>
           </Link>
 
-          <Link href="/recycler/dashboard" className="group">
+          <Link href="/auth/signup?type=recycler" className="group">
             <div className="glass-panel rounded-2xl p-8 text-left h-full transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-transparent hover:border-accent-violet/30">
               <div className="w-14 h-14 rounded-full bg-violet-100 flex items-center justify-center mb-6 text-accent-violet">
                 <Recycle className="w-7 h-7" />
@@ -79,11 +79,16 @@ export default function Home() {
                 Review incoming opportunities, manage processing, issue receipts, and list recovered materials.
               </p>
               <div className="flex items-center text-accent-violet font-semibold group-hover:translate-x-2 transition-transform duration-300">
-                Continue as Recycler <ArrowRight className="ml-2 w-5 h-5" />
+                Create Recycler Account <ArrowRight className="ml-2 w-5 h-5" />
               </div>
             </div>
           </Link>
         </motion.div>
+
+        <p className="-mt-16 mb-10 text-sm text-slate-600">
+          Already have an account?{" "}
+          <Link href="/auth/login" className="font-semibold text-brand-700 hover:underline">Sign in</Link>
+        </p>
 
         <motion.div
           initial={{ opacity: 0 }}

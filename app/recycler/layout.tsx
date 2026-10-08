@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Inbox, Settings, Activity, Store, ArrowLeftRight, User, Menu, X, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { OrganizationAccount } from "@/components/circulo/OrganizationAccount";
 
 const navItems = [
   { name: "Dashboard", href: "/recycler/dashboard", icon: LayoutDashboard },
@@ -66,12 +67,10 @@ export default function RecyclerLayout({ children }: { children: React.ReactNode
               <div className="text-sm font-bold text-blue-700">Verified Recycler</div>
             </div>
           </div>
-          <Link href="/recycler/profile">
-            <div className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
-              <User className="mr-3 flex-shrink-0 h-5 w-5 text-slate-400" />
-              EcoCycle Facility
-            </div>
-          </Link>
+          <div className="flex items-start gap-3 px-3 py-2 text-sm">
+            <User className="mt-0.5 h-5 w-5 flex-shrink-0 text-slate-400" />
+            <OrganizationAccount fallbackName="EcoCycle Facility" />
+          </div>
         </div>
       </aside>
 
@@ -163,4 +162,3 @@ export default function RecyclerLayout({ children }: { children: React.ReactNode
     </div>
   );
 }
-
